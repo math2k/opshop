@@ -1,0 +1,19 @@
+{% load bootstrap3 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OpShop!</title>
+
+{% bootstrap_css %}
+
+</head>
+<body>
+{% bootstrap_messages %}
+<h1>Welcome to the op-shop!</h1>
+{% block content %}
+{% endblock %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+{% bootstrap_javascript %}
+</body>
+</html>
