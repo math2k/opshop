@@ -9,11 +9,18 @@
 
 </head>
 <body>
-{% bootstrap_messages %}
-<h1>Welcome to the op-shop!</h1>
+{% bootstrap_messages jquery=1 %}
+<h1 style="text-align: center">Welcome to the op-shop!</h1>
+<div class="col-xs-6" style="margin: 0 auto 0 auto; float: none;">
 {% block content %}
 {% endblock %}
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 {% bootstrap_javascript %}
+<script>
+$(".alert-dismissable").fadeTo(10000, 500).slideUp(500, function(){
+    $(".alert-dismissable").alert('close');
+});
+</script>
 </body>
 </html>

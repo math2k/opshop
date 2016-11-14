@@ -1,17 +1,14 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 
-{# Display a form #}
 {% block content %}
-    <div class="col-xs-10 col-xs-offset1">
-        <form action="" method="post" class="form">
-            {% csrf_token %}
-            {% bootstrap_form form %}
-            {% buttons %}
-                <button type="submit" class="btn btn-primary">
-                    {% bootstrap_icon "shopping-cart" %} Checkout
-                </button>
-            {% endbuttons %}
-        </form>
-    </div>
+    <form action="" method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary" style="margin-top: 50px; width: 100%;">
+                {% bootstrap_icon "shopping-cart" %} Checkout
+            </button>
+        {% endbuttons %}
+    </form>
 {% endblock %}
