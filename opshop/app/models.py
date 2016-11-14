@@ -56,20 +56,6 @@ class UserProfile(models.Model):
     balance = models.DecimalField(max_digits=6, decimal_places=2)
 
 
-# @receiver(post_save, sender=Sale)
-# def update_balance_from_sale(sender, instance, **kwargs):
-#     def on_commit():
-#         if not kwargs['created']:
-#             # Shouldn't update a sale. sales are final.
-#             return
-#         if instance.payment_mode == 'credit':
-#             instance.user.profile.balance -= instance.total
-#             instance.user.profile.save()
-#
-#     from django.db import transaction
-#     transaction.on_commit(on_commit)
-
-
 @receiver(post_save, sender=Transaction)
 def update_balance_from_transaction(sender, instance, **kwargs):
     def on_commit():
