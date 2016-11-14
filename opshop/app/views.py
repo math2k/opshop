@@ -12,6 +12,11 @@ class SaleFormView(CreateView):
     model = Sale
     template_name = "app/sale.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(SaleFormView, self).get_context_data(**kwargs)
+        context['sale'] = self.request.GET.get('sale')
+        return context
+
     def form_valid(self, form):
         ret = super(SaleFormView, self).form_valid(form)
         sl = SaleLine(quantity=1, item=form.cleaned_data['item'], sale=self.object)
@@ -25,4 +30,4 @@ class SaleFormView(CreateView):
         return ret
 
     def get_success_url(self):
-        return reverse_lazy('sale')
+        return reverse_lazy('sale') + "?sale=1"

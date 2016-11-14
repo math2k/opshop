@@ -1,4 +1,4 @@
-{% load bootstrap3 %}
+{% load bootstrap3 static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +9,9 @@
 
 </head>
 <body>
+<div class="col-xs-6" style="margin: 0 auto 0 auto; float: none; text-align: center;">
 {% bootstrap_messages jquery=1 %}
+</div>
 <h1 style="text-align: center">Welcome to the op-shop!</h1>
 <div class="col-xs-6" style="margin: 0 auto 0 auto; float: none;">
 {% block content %}
@@ -21,6 +23,10 @@
 $(".alert-dismissable").fadeTo(10000, 500).slideUp(500, function(){
     $(".alert-dismissable").alert('close');
 });
+{% if sale %}
+    var snd = new Audio("{% static "cash-register.wav" %}");
+    snd.play();
+{% endif %}
 </script>
 </body>
 </html>
