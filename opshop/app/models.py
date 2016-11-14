@@ -70,6 +70,17 @@ class UserProfile(models.Model):
 #     transaction.on_commit(on_commit)
 
 
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, **kwargs):
+    def on_commit():
+        if not kwargs['created']:
+            return
+        up = UserProfile(user=instance, balance=0)
+        up.save()
+    from django.db import transaction
+    transaction.on_commit(on_commit)
+
+
 @receiver(post_save, sender=Transaction)
 def update_balance_from_transaction(sender, instance, **kwargs):
     def on_commit():
