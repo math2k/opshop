@@ -1,14 +1,51 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 
+{% block top %}
+    <button id="scan" class="scan btn btn-gray" style="position: absolute; top: 0; right: 0; display: none; text-align: center">Scan</button>
+{% endblock %}
+
 {% block content %}
+    <p style="text-align: center">Select an item below using the dropdown, or <a href="#" class="scan">scan it</a></p>
     <form action="" method="post" class="form">
         {% csrf_token %}
-        {% bootstrap_form form %}
+        {% bootstrap_field form.item %}
+        {% bootstrap_field form.user %}
+        {% bootstrap_field form.payment_mode %}
         {% buttons %}
             <button type="submit" class="btn btn-primary" style="margin-top: 50px; width: 100%;">
                 {% bootstrap_icon "shopping-cart" %} Checkout
             </button>
         {% endbuttons %}
     </form>
+    <input id="ean" type="text" maxlength="13" style="opacity: 0; position: absolute; top: -2000px" name="ean"/>
+{% endblock %}
+
+{% block js %}
+    var ean_to_id = {
+    {% for i in items %}
+        {{ i.ean }}: {{ i.id }},
+    {% endfor %}
+    };
+    $(document).ready(function(){
+        $("#ean").focus();
+    });
+    $(".scan").on('click', function(){
+        $("#ean").val("");
+        $("#ean").focus();
+    });
+    $("#ean").on('blur', function(){
+        $("#scan").show("slideDown");
+    });
+    $("#ean").on('focus', function (){
+        $("#scan").hide("slideDown");
+    });
+    $("#ean").on('change keypress paste keydown keyup', function(){
+        var ean = $(this).val();
+        if(ean.length == 13){
+            if(ean_to_id.hasOwnProperty(ean) != -1){
+                $("#id_item").val(ean_to_id[ean]);
+            }
+        }
+    });
 {% endblock %}

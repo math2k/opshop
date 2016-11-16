@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
 from app.forms import SaleForm
-from app.models import Sale, SaleLine, Transaction
+from app.models import Sale, SaleLine, Transaction, Item
 
 
 class SaleFormView(CreateView):
@@ -15,6 +15,7 @@ class SaleFormView(CreateView):
     def get_context_data(self, **kwargs):
         context = super(SaleFormView, self).get_context_data(**kwargs)
         context['sale'] = self.request.GET.get('sale')
+        context['items'] = Item.objects.all()
         return context
 
     def form_valid(self, form):

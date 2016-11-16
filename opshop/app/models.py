@@ -1,3 +1,4 @@
+# coding=utf-8
 from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
@@ -9,7 +10,7 @@ from django.dispatch import receiver
 class Item(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    ean = models.CharField(max_length=50)
+    ean = models.CharField(max_length=13)
     quantity = models.IntegerField()
     last_refill = models.DateTimeField(null=True, blank=True)
 
@@ -23,13 +24,13 @@ class Transaction(models.Model):
     amount = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __unicode__(self):
-        return u"{0} ({1})".format(self.user.username, self.amount)
+        return u"{0} - {1}€ available".format(self.user.username, self.amount)
 
 
 class Sale(models.Model):
     user = models.ForeignKey(to=User, null=True)
     datetime = models.DateTimeField(auto_now_add=True)
-    payment_mode = models.CharField(choices=(('cash', 'Cash'), ('credit', 'Credit')), max_length=50)
+    payment_mode = models.CharField(choices=(('cash', 'Cash'), ('credit', 'Credit')), default='cash', max_length=50)
 
     @property
     def total(self):
