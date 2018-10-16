@@ -5,33 +5,45 @@
     <meta charset="UTF-8">
     <title>OpShop!</title>
 
-{% bootstrap_css %}
+    {% bootstrap_css %}
+    <style>
+        /* In order to place the tracking correctly */
+        canvas.drawing, canvas.drawingBuffer {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
 
 </head>
 <body>
 <div class="col-xs-6" style="margin: 0 auto 0 auto; float: none; text-align: center;">
-{% bootstrap_messages jquery=1 %}
+    {% bootstrap_messages jquery=1 %}
 </div>
 {% block top %}
 {% endblock %}
 <h1 style="text-align: center; margin-top: 50px;">Welcome to the op-shop!</h1>
 <div class="col-xs-6" style="margin: 0 auto 0 auto; float: none;">
-{% block content %}
-{% endblock %}
+    {% block content %}
+    {% endblock %}
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<script src="{% static "quaggajs/quagga.min.js" %}"></script>
 {% bootstrap_javascript %}
 <script>
-$(".alert-dismissable").fadeTo(10000, 500).slideUp(500, function(){
-    $(".alert-dismissable").alert('close');
-});
-{% if sale %}
-    var snd = new Audio("{% static "cash-register.wav" %}");
-    snd.play();
-{% endif %}
-{% block js %}
-{% endblock %}
+    $(".alert-dismissable").fadeTo(10000, 500).slideUp(500, function () {
+        $(".alert-dismissable").alert('close');
+    });
+    {% if sale %}
+        var snd = new Audio("{% static "cash-register.wav" %}");
+        snd.play();
+    {% endif %}
+    {% block js %}
+    {% endblock %}
 
 </script>
+{% block extra_body %}
+{% endblock %}
 </body>
 </html>

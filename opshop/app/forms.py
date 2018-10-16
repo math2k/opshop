@@ -16,7 +16,6 @@ class SaleForm(forms.ModelForm):
 
     item = forms.ModelChoiceField(queryset=Item.objects.all())
     user = UserModelChoiceField(queryset=User.objects.all())
-    payment_mode = forms.ChoiceField(choices=(('cash', 'Cash'), ('credit', 'Credit')), initial='cash', widget=widgets.RadioSelect())
 
     class Meta:
         model = Sale

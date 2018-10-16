@@ -10,7 +10,7 @@ from django.dispatch import receiver
 class Item(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    ean = models.CharField(max_length=13)
+    ean = models.CharField(max_length=13, primary_key=True)
     quantity = models.IntegerField()
     last_refill = models.DateTimeField(null=True, blank=True)
 
@@ -30,7 +30,6 @@ class Transaction(models.Model):
 class Sale(models.Model):
     user = models.ForeignKey(to=User, null=True)
     datetime = models.DateTimeField(auto_now_add=True)
-    payment_mode = models.CharField(choices=(('cash', 'Cash'), ('credit', 'Credit')), default='cash', max_length=50)
 
     @property
     def total(self):
@@ -81,4 +80,33 @@ def update_stock_from_sale(sender, instance, **kwargs):
 
     from django.db import transaction
     transaction.on_commit(on_commit)
+
+
+class Delivery(models.Model):
+    datetime = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def total(self):
+        return sum(l.paid for l in self.deliveryline_set.all())
+
+
+class DeliveryLine(models.Model):
+    delivery = models.ForeignKey(Delivery, null=True)
+    item = models.CharField(max_length=255)
+    boxes = models.IntegerField()
+    items_per_box = models.IntegerField()
+    box_price = models.DecimalField(decimal_places=2, max_digits=3)
+    price = models.DecimalField(decimal_places=2, max_digits=3)
+
+    @property
+    def individual_price(self):
+        return self.box_price / self.items_per_box
+
+    @property
+    def suggested_retail_price(self):
+        return self.individual_price * 1.1
+
+    @property
+    def paid(self):
+        return self.boxes * self.box_price
 

@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from app.models import UserProfile, SaleLine, Sale, Item, Transaction
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
+from app.models import DeliveryLine, Delivery
+
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
@@ -61,8 +63,20 @@ class TransactionAdmin(ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
+
+class DeliveryInline(admin.TabularInline):
+    model = DeliveryLine
+
+
+class DeliveryAdmin(ModelAdmin):
+    inlines = (DeliveryInline,)
+    list_display = ('datetime', 'total')
+
+
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Sale, SaleAdmin)
 admin.site.register(Transaction, TransactionAdmin)
+admin.site.register(Delivery, DeliveryAdmin)
