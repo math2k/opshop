@@ -91,7 +91,7 @@ class Delivery(models.Model):
 
 
 class DeliveryLine(models.Model):
-    delivery = models.ForeignKey(Delivery, null=True)
+    delivery = models.ForeignKey(Delivery)
     item = models.CharField(max_length=255)
     boxes = models.IntegerField()
     items_per_box = models.IntegerField()
