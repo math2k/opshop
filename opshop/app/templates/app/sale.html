@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load bootstrap3 %}
+{% load bootstrap3 static %}
 
 {% block top %}
     <button id="scan" class="scan btn btn-gray"
@@ -99,11 +99,11 @@
 {% endblock %}
 
 {% block js %}
-    var ean_to_id = {
+    var eans = [
     {% for i in items %}
-        {{ i.ean }}: {{ i.pk }},
+        '{{ i.ean }}',
     {% endfor %}
-    };
+    ];
 {% endblock %}
 
 {% block extra_body %}
@@ -195,10 +195,21 @@ $(function() {
 	// the barcode had actually been found.
 	Quagga.onDetected(function(result) {
 		if (result.codeResult.code){
-			$('#id_item').val(result.codeResult.code);
-			console.log(result.codeResult.code)
-			Quagga.stop();
-			setTimeout(function(){ $('#livestream_scanner').modal('hide'); }, 1000);
+		    if(eans.indexOf(result.codeResult.code) >= 0) {
+                $('#id_item').val(result.codeResult.code);
+                var snd = new Audio("{% static "scan-ok.wav" %}");
+                snd.play();
+                Quagga.stop();
+                setTimeout(function () {
+                    $('#livestream_scanner').modal('hide');
+                }, 1000);
+            }else{
+		        var snd = new Audio("{% static "scan-error.wav" %}");
+                snd.play();
+		        $('#livestream_scanner .modal-body .error').html('<div class="alert alert-danger">' +
+                    '<strong><i class="fa fa-exclamation-triangle"></i> Not found</strong>' +
+                    ': Item with barcode '+result.codeResult.code+' not found. Try again ?</div>');
+            }
 		}
 	});
 

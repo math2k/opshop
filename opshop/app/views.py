@@ -4,6 +4,7 @@ import string
 
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, FormView
 
@@ -40,7 +41,7 @@ class SaleFormView(CreateView):
                                  self.object.total, self.object.user.profile.balance))
         else:
             messages.warning(self.request,
-                             "{0}€ have been substracted from your balance. You balance is negative! ({1}€)".format(
+                             "{0}€ have been substracted from your balance. Your balance is negative! ({1}€)".format(
                                  self.object.total, self.object.user.profile.balance))
         return ret
 
@@ -77,7 +78,11 @@ class CreateAccountFormView(FormView):
         ret = super(CreateAccountFormView, self).form_valid(form)
         email = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
         u = User(username=form.cleaned_data['user'], password="xxxx", email=email+"@nowhere.eu")
-        u.save()
+        try:
+            u.save()
+            messages.success(self.request, "Your account has been created. You can now top up your account.")
+        except IntegrityError as e:
+            messages.error(self.request, "You're not the first one with that name.. pick another one!")
         return ret
 
     def get_success_url(self):
