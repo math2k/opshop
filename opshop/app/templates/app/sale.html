@@ -204,8 +204,8 @@ $(function() {
                     $('#livestream_scanner').modal('hide');
                 }, 1000);
             }else{
-		        var snd = new Audio("{% static "scan-error.wav" %}");
-                snd.play();
+		        //var snd = new Audio("{% static "scan-error.wav" %}");
+                //snd.play();
 		        $('#livestream_scanner .modal-body .error').html('<div class="alert alert-danger">' +
                     '<strong><i class="fa fa-exclamation-triangle"></i> Not found</strong>' +
                     ': Item with barcode '+result.codeResult.code+' not found. Try again ?</div>');
