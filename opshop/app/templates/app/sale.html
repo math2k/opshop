@@ -8,7 +8,10 @@
 {% endblock %}
 
 {% block content %}
-    <p style="text-align: center">Select an item below using the dropdown, or <a href="#" data-toggle="modal" data-target="#livestream_scanner">scan it</a></p>
+    <p style="text-align: center">Select an item below using the dropdown, or <a href="#" data-toggle="modal" data-target="#livestream_scanner">scan it</a>
+    </p>
+    <p style="text-align: center">Don't have an account yet ? <a href="#" data-toggle="modal" data-target="#create_account">Create account</a>
+    </p>
     <form action="" method="post" class="form">
         {% csrf_token %}
         {% bootstrap_field form.item %}
@@ -24,6 +27,7 @@
             </button>
         {% endbuttons %}
     </form>
+    <button type="submit" class="btn btn-success pull-right" data-toggle="modal" data-target="#top_up"><i class="glyphicon glyphicon-eur"></i> Top up my account</button>
 <div class="modal" id="livestream_scanner">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -45,6 +49,49 @@
 				<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
 			</div>
 		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal" id="top_up">
+	<div class="modal-dialog">
+		<form method="post" action="{% url "top-up" %}">
+            {% csrf_token %}
+        <div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">Top up your account</h4>
+			</div>
+			<div class="modal-body" style="position: static">
+                {% bootstrap_field top_up_form.user %}
+                {% bootstrap_field top_up_form.amount %}
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary">Add to my account</button>
+			</div>
+		</div><!-- /.modal-content -->
+        </form>
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal" id="create_account">
+	<div class="modal-dialog">
+		<form method="post" action="{% url "create-account" %}">
+            {% csrf_token %}
+        <div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">Create your account</h4>
+			</div>
+			<div class="modal-body" style="position: static">
+                {% bootstrap_field account_form.user %}
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary">Create my account</button>
+			</div>
+		</div><!-- /.modal-content -->
+        </form>
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 

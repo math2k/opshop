@@ -20,3 +20,12 @@ class SaleForm(forms.ModelForm):
     class Meta:
         model = Sale
         exclude = []
+
+
+class TopUpForm(forms.Form):
+    user = UserModelChoiceField(queryset=User.objects.all())
+    amount = forms.DecimalField()
+
+
+class AccountForm(forms.Form):
+    user = forms.CharField(max_length=64)

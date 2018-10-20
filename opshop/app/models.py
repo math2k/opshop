@@ -110,3 +110,8 @@ class DeliveryLine(models.Model):
     def paid(self):
         return self.boxes * self.box_price
 
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance, balance=0)
