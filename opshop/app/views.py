@@ -15,13 +15,14 @@ from django.conf import settings
 from app.forms import SaleForm, TopUpForm, AccountForm
 from app.models import Sale, SaleLine, Transaction, Item, UserProfile
 
+
 class SharedSecretMixin(object):
     def dispatch(self, request, *args, **kwargs):
         if request.META.get('HTTP_SECRET') == settings.SHARED_SECRET:
-           
-	    return super(SharedSecretMixin, self).dispatch(request, *args, **kwargs)
+            return super(SharedSecretMixin, self).dispatch(request, *args, **kwargs)
         else:
             return HttpResponseForbidden(request.META)
+
 
 class SaleFormView(CreateView):
     form_class = SaleForm
@@ -59,28 +60,28 @@ class SaleFormView(CreateView):
     def get_success_url(self):
         return reverse_lazy('sale') + "?sale=1"
 
-class PayJsonView(SharedSecretMixin, View):
 
+class PayJsonView(SharedSecretMixin, View):
     allowed_methods = ['POST']
-    
+
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
         return super(PayJsonView, self).dispatch(*args, **kwargs)
 
     def post(self, request):
-	user_profile = UserProfile.objects.get(badge=request.POST.get('badge'))
-	user = user_profile.user
-	item = Item.objects.get(code=request.POST.get('code'))
-	sale = Sale(user=user)
-	sale.save()
-	sl = SaleLine(quantity=1, item=item, sale=sale)
+        user_profile = UserProfile.objects.get(badge=request.POST.get('badge'))
+        user = user_profile.user
+        item = Item.objects.get(code=request.POST.get('code'))
+        sale = Sale(user=user)
+        sale.save()
+        sl = SaleLine(quantity=1, item=item, sale=sale)
         sl.save()
         t = Transaction(user=user, amount=-sale.total)
         t.save()
-	return HttpResponse()
-	
-class TopUpFormView(FormView):
+        return HttpResponse()
 
+
+class TopUpFormView(FormView):
     form_class = TopUpForm
     template_name = "app/topup.html"
     prefix = "top-up"
@@ -89,7 +90,8 @@ class TopUpFormView(FormView):
         ret = super(TopUpFormView, self).form_valid(form)
         t = Transaction(user=form.cleaned_data['user'], amount=form.cleaned_data['amount'])
         t.save()
-        messages.success(self.request, "{}€ have been added to your balance. You now have {}€ available".format(form.cleaned_data['amount'], form.cleaned_data['user'].profile.balance))
+        messages.success(self.request, "{}€ have been added to your balance. You now have {}€ available".format(
+            form.cleaned_data['amount'], form.cleaned_data['user'].profile.balance))
         return ret
 
     def get_initial(self):
@@ -107,7 +109,7 @@ class CreateAccountFormView(FormView):
     def form_valid(self, form):
         ret = super(CreateAccountFormView, self).form_valid(form)
         email = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(12))
-        u = User(username=form.cleaned_data['user'], password="xxxx", email=email+"@nowhere.eu")
+        u = User(username=form.cleaned_data['user'], password="xxxx", email=email + "@nowhere.eu")
         try:
             u.save()
             messages.success(self.request, "Your account has been created. You can now top up your account.")
@@ -118,27 +120,32 @@ class CreateAccountFormView(FormView):
     def get_success_url(self):
         return reverse_lazy('sale')
 
+
 class ListItemsJsonView(SharedSecretMixin, View):
     def get(self, request):
-    	return JsonResponse(["{} - {}€".format(i.name, i.price) for i in Item.objects.all().order_by('name')], safe=False)
+        return JsonResponse(["{} - {}€".format(i.name, i.price) for i in Item.objects.all().order_by('name')],
+                            safe=False)
+
 
 class GetUserJsonView(SharedSecretMixin, View):
     def get(self, request):
-    	user_profile = UserProfile.objects.filter(badge=self.request.GET.get('badge')).first()
-	if user_profile:	
-		return JsonResponse(user_profile.user.username, safe=False)
-	raise Http404
+        user_profile = UserProfile.objects.filter(badge=self.request.GET.get('badge')).first()
+        if user_profile:
+            return JsonResponse(user_profile.user.username, safe=False)
+        raise Http404
+
 
 class GetBalanceJsonView(SharedSecretMixin, View):
     def get(self, request):
-    	user_profile = UserProfile.objects.filter(badge=self.request.GET.get('badge')).first()
-	if user_profile:	
-		return JsonResponse(user_profile.balance, safe=False)
-	raise Http404
+        user_profile = UserProfile.objects.filter(badge=self.request.GET.get('badge')).first()
+        if user_profile:
+            return JsonResponse(user_profile.balance, safe=False)
+        raise Http404
+
 
 class GetItemJsonView(SharedSecretMixin, View):
     def get(self, request):
-    	item = Item.objects.filter(code=self.request.GET.get('code')).first()
-	if item:	
-		return JsonResponse({'id':item.code, 'name': item.name, 'price': item.price}, safe=False)
-	raise Http404
+        item = Item.objects.filter(code=self.request.GET.get('code')).first()
+        if item:
+            return JsonResponse({'id': item.code, 'name': item.name, 'price': item.price}, safe=False)
+        raise Http404

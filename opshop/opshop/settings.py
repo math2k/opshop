@@ -30,7 +30,7 @@ SECRET_KEY = s['secret_key']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['opshop.math2k.net', '.4lunch.eu']
+ALLOWED_HOSTS = ['opshop.math2k.net', '.4lunch.eu', '127.0.0.1']
 
 
 # Application definition
@@ -82,10 +82,10 @@ WSGI_APPLICATION = 'opshop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-	'NAME': 'opshop2',
+        'ENGINE': 'django.db.backends.sqlite3',
+	'NAME': 'db2.sqlite3',
 	'USER': 'opshop',
-	'PASSWORD': 'UyR6yALCMLK5Q7Sz'
+	'PASSWORD': s['db_password']
     }
 }
 
