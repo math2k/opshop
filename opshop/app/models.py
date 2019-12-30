@@ -15,7 +15,7 @@ class Item(models.Model):
     last_refill = models.DateTimeField(null=True, blank=True)
     code = models.CharField(max_length=4, null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{0} - {1}".format(self.name, self.price)
 
 
@@ -24,7 +24,7 @@ class Transaction(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
     amount = models.DecimalField(max_digits=6, decimal_places=2)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{0} - {1}€ available".format(self.user.username, self.amount)
 
 
@@ -39,7 +39,7 @@ class Sale(models.Model):
             total += sl.quantity * sl.item.price
         return total
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{0} ({1})".format(self.user, self.total)
 
 
@@ -48,7 +48,7 @@ class SaleLine(models.Model):
     item = models.ForeignKey(to=Item)
     quantity = models.IntegerField()
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{0} ({1})".format(self.item.name, self.quantity)
 
 
