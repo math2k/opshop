@@ -46,7 +46,7 @@ class SaleFormView(CreateView):
         t = Transaction(user=self.object.user, amount=-self.object.total)
         t.save()
         self.request.session['userid'] = self.object.user.pk
-        if self.object.user.profile.balance > 0:
+        if self.object.user.profile.balance >= 0:
             messages.success(self.request,
                              "{0}€ have been substracted from your balance. You now have {1}€ available".format(
                                  self.object.total, self.object.user.profile.balance))
