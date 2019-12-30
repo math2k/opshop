@@ -14,8 +14,8 @@ class UserModelChoiceField(forms.ModelChoiceField):
 
 class SaleForm(forms.ModelForm):
 
-    item = forms.ModelChoiceField(queryset=Item.objects.all())
-    user = UserModelChoiceField(queryset=User.objects.all())
+    item = forms.ModelChoiceField(queryset=Item.objects.all().order_by('name'))
+    user = UserModelChoiceField(queryset=User.objects.all().order_by('username'))
 
     class Meta:
         model = Sale

@@ -13,6 +13,7 @@ class Item(models.Model):
     ean = models.CharField(max_length=13, primary_key=True)
     quantity = models.IntegerField()
     last_refill = models.DateTimeField(null=True, blank=True)
+    code = models.CharField(max_length=4, null=True, blank=True)
 
     def __unicode__(self):
         return u"{0} - {1}".format(self.name, self.price)
@@ -54,6 +55,7 @@ class SaleLine(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=6, decimal_places=2)
+    badge = models.CharField(max_length=50, null=True, blank=True)
 
 
 @receiver(post_save, sender=Transaction)

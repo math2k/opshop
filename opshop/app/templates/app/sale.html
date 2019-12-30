@@ -12,7 +12,7 @@
     </p>
     <p style="text-align: center">Don't have an account yet ? <a href="#" data-toggle="modal" data-target="#create_account">Create account</a>
     </p>
-    <form action="" method="post" class="form">
+    <form action="" method="post" class="form" id="sale">
         {% csrf_token %}
         {% bootstrap_field form.item %}
         <div class="col-xs-12" style="text-align: center">
@@ -105,6 +105,11 @@
         '{{ i.ean }}',
     {% endfor %}
     ];
+    $( "#sale" ).submit(function( event ) {
+  	if(!confirm( "Are you "+ $('#id_user').find(':selected').text().split('(')[0] + "?")){
+     	    event.preventDefault();
+	}
+    });
 {% endblock %}
 
 {% block extra_body %}
@@ -133,7 +138,8 @@ $(function() {
 			numOfWorkers: (navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 4),
 			decoder: {
 				"readers":[
-					{"format":"ean_reader","config":{}}
+					{"format":"ean_reader","config":{}},
+					{"format":"ean_8_reader","config":{}}
 				]
 			},
 			locate: true

@@ -11,21 +11,26 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+with open(os.path.join(BASE_DIR, 'opshop', 'settings.json')) as f:
+    s = json.load(f)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^nt$1nqs=sf(z6^67tu#4kh)a1z$twkscl!+vgc$ewadlm&8pb'
+SHARED_SECRET = s['shared_secret'] 
+SECRET_KEY = s['secret_key'] 
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['opshop.math2k.net', '.4lunch.eu']
 
 
 # Application definition
@@ -77,8 +82,10 @@ WSGI_APPLICATION = 'opshop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db2.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+	'NAME': 'opshop2',
+	'USER': 'opshop',
+	'PASSWORD': 'UyR6yALCMLK5Q7Sz'
     }
 }
 
@@ -120,5 +127,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 SESSION_COOKIE_AGE = 60*60*24*365*5
+
