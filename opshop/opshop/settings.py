@@ -82,8 +82,8 @@ WSGI_APPLICATION = 'opshop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-	'NAME': 'db2.sqlite3',
+    'ENGINE': 'django.db.backends.mysql',
+	'NAME': 'opshop2',
 	'USER': 'opshop',
 	'PASSWORD': s['db_password']
     }
